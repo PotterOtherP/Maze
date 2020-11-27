@@ -1,46 +1,60 @@
 import java.util.Random;
+import java.util.ArrayList;
 
 public class Maze {
 
-    public static final int ROWS = 15;
-    public static final int COLUMNS = 20;
+    public static final int ROWS_DEFAULT = 15;
+    public static final int COLUMNS_DEFAULT = 20;
 
-    public static final int WALL_LEFT = 0;
-    public static final int WALL_TOP = 0;
-    public static final int WALL_RIGHT = COLUMNS - 1;
-    public static final int WALL_BOTTOM = ROWS - 1;
 
     public static final int MAX_ITERATIONS = 1000;
 
-    public static char[][] mazeGrid;
+    private char[][] mazeGrid;
+    private ArrayList<WallPath> paths;
+    private int rows;
+    private int columns;
+    private int wall_left;
+    private int wall_top;
+    private int wall_right;
+    private int wall_bottom;
 
-    public static void main(String[] args)
+    public Maze()
     {
-
-        // System.out.println("Rows: " + ROWS);    
-        // System.out.println("Columns: " + COLUMNS);    
-        System.out.println();    
-
-        mazeGrid = new char[ROWS][COLUMNS];
-
-        initMaze();
-        generateMaze();
-
-        System.out.println();    
-        displayMaze();
-
-        System.out.println();    
-        System.out.println("Maze complete: " + mazeComplete());
-
-
+        this(ROWS_DEFAULT, COLUMNS_DEFAULT);
     }
 
-    public static boolean generateMaze()
+    public Maze(int rows, int columns)
+    {
+        if (rows < 3 || columns < 3)
+        {
+            throw new IllegalArgumentException("Maze must have more than 2 rows and columns.");
+        }
+
+        this.rows = rows;
+        this.columns = columns;
+        this.wall_left = 0;
+        this.wall_top = 0;
+        this.wall_right = this.columns - 1;
+        this.wall_bottom = this.rows - 1;
+
+        mazeGrid = new char[rows][columns];
+        paths = new ArrayList<WallPath>();
+
+        this.init();
+        this.generate();
+    }
+
+
+    private boolean generate()
     {
         int iterations = 0;
 
-        while (!mazeComplete())
+        // Create the seed WallPaths
+
+        while (!this.isComplete())
         {
+            
+            
             ++iterations;
 
             if (iterations > MAX_ITERATIONS)
@@ -50,39 +64,40 @@ public class Maze {
             }
         }
 
+        System.out.println("Maze generated in " + iterations + " iterations.");
         return true;
     }
 
 
-    public static void initMaze()
+    private void init()
     {
         // Fill grid with letters and create border walls
-        for (int i = 0; i < ROWS; ++i)
+        for (int i = 0; i < this.rows; ++i)
         {
-            for (int j = 0; j < COLUMNS; ++j)
+            for (int j = 0; j < this.columns; ++j)
             {
-                if (i == WALL_TOP || i == WALL_BOTTOM || j == WALL_LEFT || j == WALL_RIGHT)
-                    mazeGrid[i][j] = 'W';
+                if (i == this.wall_top || i == this.wall_bottom || j == this.wall_left || j == this.wall_right)
+                    mazeGrid[i][j] = 'w';
                 else
-                    mazeGrid[i][j] = 'O';
+                    mazeGrid[i][j] = 'o';
             }
         }
 
         // Select an entrance ("S") and exit ("E")
 
-        int start = getRandom(COLUMNS);
-        int exit = getRandom(COLUMNS);
+        int start = getRandom(this.columns - 2);
+        int exit = getRandom(this.columns - 2);
 
-        mazeGrid[WALL_TOP][start] = 'S';
-        mazeGrid[WALL_BOTTOM][exit] = 'E';
+        mazeGrid[this.wall_top][start + 1] = 'S';
+        mazeGrid[this.wall_bottom][exit + 1] = 'E';
     }
 
 
-    public static void displayMaze()
+    public void display()
     {
-        for (int i = 0; i < ROWS; ++i)
+        for (int i = 0; i < this.rows; ++i)
         {
-            for (int j = 0; j < COLUMNS; ++j)
+            for (int j = 0; j < this.columns; ++j)
             {
                 System.out.print(mazeGrid[i][j] + " ");
             }
@@ -97,21 +112,16 @@ public class Maze {
        return rand.nextInt(n);
     }
 
-    public static boolean mazeComplete()
+    public boolean isComplete()
     {
-        if (ROWS <= 2 || COLUMNS <= 2)
+        for (int i = 1; i < this.rows - 1; ++i)
         {
-            return true;
-        }
-
-        for (int i = 1; i < ROWS - 1; ++i)
-        {
-            for (int j = 1; j < COLUMNS -1; ++j)
+            for (int j = 1; j < this.columns -1; ++j)
             {
-                if (mazeGrid[i][j] == 'O' &&
-                    mazeGrid[i + 1][j] == 'O' &&
-                    mazeGrid[i][j + 1] == 'O' &&
-                    mazeGrid[i + 1][j + 1] == 'O')
+                if (mazeGrid[i][j] == 'o' &&
+                    mazeGrid[i + 1][j] == 'o' &&
+                    mazeGrid[i][j + 1] == 'o' &&
+                    mazeGrid[i + 1][j + 1] == 'o')
                 {
                     return false;
                 }
