@@ -6,12 +6,11 @@ public class MazeGame {
         System.out.println("Columns: " + Maze.COLUMNS_DEFAULT);    
         System.out.println();    
 
-        Maze maze = new Maze(15, 20);
+        Maze maze = new Maze(6);
 
         System.out.println();    
         maze.display();
 
         System.out.println();    
-        System.out.println("Maze complete: " + maze.isComplete());
     }
 }
