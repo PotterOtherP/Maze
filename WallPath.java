@@ -106,6 +106,8 @@ public class WallPath {
             active = false;
         }
 
+        // active = true;
+
     }
 
 
