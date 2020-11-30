@@ -10,6 +10,7 @@ public class Maze {
 
     private char[][] mazeGrid;
     private ArrayList<WallPath> paths;
+    private ArrayList<WallPath> branches;
     private int complexity;
     private int rows;
     private int columns;
@@ -43,6 +44,7 @@ public class Maze {
 
         mazeGrid = new char[rows][columns];
         paths = new ArrayList<WallPath>();
+        branches = new ArrayList<WallPath>();
 
         this.init();
         this.generate();
@@ -54,6 +56,88 @@ public class Maze {
         {
             paths.add(new WallPath(x, y, d));
             mazeGrid[y][x] = CH_WALL;
+        }
+
+    }
+
+    private void addTopWallPaths()
+    {
+        Random rando = new Random();
+
+        int pathY = wall_top + 1;
+        int[] xCoords = new int[complexity / 2];
+
+        if (xCoords.length <= 0) return;
+
+        if (startPoint.x >= columns / 2)
+            xCoords[0] = rando.nextInt(startPoint.x - 4 ) + 2;
+        else
+            xCoords[0] = rando.nextInt(columns - startPoint.x ) + startPoint.x + 1;
+
+        addPath(xCoords[0], pathY, 2);
+
+        for (int i = 1; i < xCoords.length; ++i)
+        {
+            int nextX = xCoords[0];
+            boolean condition = true;
+
+            while(condition)
+            {
+                nextX = rando.nextInt(columns - 4) + 2;
+                condition = false;
+
+                for (int j = 0; j < i; ++j)
+                {
+                    if (Math.abs(nextX - xCoords[j]) < 2)
+                        condition = true;
+                }
+
+                if (Math.abs(nextX - startPoint.x) < 3)
+                    condition = true;
+            }
+
+            xCoords[i] = nextX;
+            addPath(nextX, pathY, 2);
+        }
+
+    }
+
+    private void addBottomWallPaths()
+    {
+        Random rando = new Random();
+
+        int pathY = wall_bottom - 1;
+        int[] xCoords = new int[complexity / 2];
+
+        if (exitPoint.x >= columns / 2)
+            xCoords[0] = rando.nextInt(exitPoint.x - 4 ) + 2;
+        else
+            xCoords[0] = rando.nextInt(columns - exitPoint.x ) + exitPoint.x + 1;
+
+        addPath(xCoords[0], pathY, 1);
+
+        for (int i = 1; i < xCoords.length; ++i)
+        {
+            int nextX = xCoords[0];
+            boolean condition = true;
+
+            while(condition)
+            {
+                nextX = rando.nextInt(columns - 4) + 2;
+                condition = false;
+
+                for (int j = 0; j < i; ++j)
+                {
+                    if (Math.abs(nextX - xCoords[j]) < 2)
+                        condition = true;
+                }
+
+                if (Math.abs(nextX - exitPoint.x) < 3)
+                    condition = true;
+            }
+
+            xCoords[i] = nextX;
+            addPath(nextX, pathY, 1);
         }
 
     }
@@ -198,6 +282,8 @@ public class Maze {
 
         addLeftWallPaths();
         addRightWallPaths();
+        addTopWallPaths();
+        addBottomWallPaths();
 
         addRandomInteriorPaths(complexity);
         System.out.println("Complexity: " + complexity);
@@ -226,6 +312,11 @@ public class Maze {
                     path.checkActive();
                 }
 
+                if (!path.active && dieRoll <= 10)
+                {
+                    branches.add(path.branch());
+                }
+
                 // update the grid letters
                 for (GridPoint pt : path.points)
                 {
@@ -235,6 +326,13 @@ public class Maze {
 
 
             ++iterations;
+            for (WallPath branch : branches)
+            {
+                if (pathIsClear(branch.getCheckPoint(), branch.getDirection()))
+                    paths.add(branch);
+            }
+
+            branches.clear();
 
             if (iterations > MAX_ITERATIONS)
             {
@@ -384,6 +482,7 @@ public class Maze {
         }
         
         return true;
+
     }
 
 }

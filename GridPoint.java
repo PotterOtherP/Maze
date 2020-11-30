@@ -15,4 +15,16 @@ public class GridPoint {
         result += "(" + x + ", " + y + ")";
         return result;
     }
+
+    public boolean equals(Object ob)
+    {
+        if (ob instanceof GridPoint)
+        {
+            GridPoint g = (GridPoint)(ob);
+
+            return (this.x == g.x && this.y == g.y);
+        }
+
+        return false;
+    }
 }

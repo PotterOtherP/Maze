@@ -27,6 +27,96 @@ public class WallPath {
         active = true;
     }
 
+    public WallPath branch()
+    {
+        int index = new Random().nextInt(points.size() - 2) + 1;
+
+        int x = points.get(index).x;
+        int y = points.get(index).y;
+
+        int dirNew = 1;
+        
+        GridPoint gUp = new GridPoint(x, y - 1);
+        GridPoint gDown = new GridPoint(x, y + 1);
+        GridPoint gLeft = new GridPoint(x - 1, y);
+        GridPoint gRight = new GridPoint(x + 1, y);
+
+        int nx = x;
+        int ny = y;
+
+        // Path is vertical
+        if ( (points.get(index - 1).equals(gUp) && points.get(index + 1).equals(gDown)) ||
+             (points.get(index + 1).equals(gUp) && points.get(index - 1).equals(gDown)) )
+        {
+            int roll = new Random().nextInt(2);
+
+            nx = (roll == 0 ? x + 1 : x - 1);
+            dirNew = (roll == 0 ? 4 : 3);
+            return new WallPath(nx, ny, dirNew);
+        }
+
+        // Path is horizontal
+        if ( (points.get(index - 1).equals(gLeft) && points.get(index + 1).equals(gRight)) ||
+             (points.get(index + 1).equals(gLeft) && points.get(index - 1).equals(gRight)) )
+        {
+            int roll = new Random().nextInt(2);
+
+            ny = (roll == 0 ? y + 1 : y - 1);
+            dirNew = (roll == 0 ? 2 : 1);
+            return new WallPath(nx, ny, dirNew);
+        }
+
+        // Corner, upper right
+        if ( (points.get(index - 1).equals(gUp) && points.get(index + 1).equals(gRight)) ||
+             (points.get(index + 1).equals(gRight) && points.get(index - 1).equals(gUp)) )
+        {
+            int roll = new Random().nextInt(2);
+
+            nx = (roll == 0 ? x - 1 : x);
+            ny = (roll == 0 ? y : y + 1);
+            dirNew = (roll == 0 ? 3 : 2);
+            return new WallPath(nx, ny, dirNew);
+        }
+
+        // Corner, upper left
+        if ( (points.get(index - 1).equals(gUp) && points.get(index + 1).equals(gLeft)) ||
+             (points.get(index + 1).equals(gLeft) && points.get(index - 1).equals(gUp)) )
+        {
+            int roll = new Random().nextInt(2);
+
+            nx = (roll == 0 ? x + 1 : x);
+            ny = (roll == 0 ? y : y + 1);
+            dirNew = (roll == 0 ? 4 : 2);
+            return new WallPath(nx, ny, dirNew);
+        }
+
+        // Corner, lower right
+        if ( (points.get(index - 1).equals(gDown) && points.get(index + 1).equals(gRight)) ||
+             (points.get(index + 1).equals(gRight) && points.get(index - 1).equals(gDown)) )
+        {
+            int roll = new Random().nextInt(2);
+
+            nx = (roll == 0 ? x - 1 : x);
+            ny = (roll == 0 ? y : y - 1);
+            dirNew = (roll == 0 ? 3 : 1);
+            return new WallPath(nx, ny, dirNew);
+        }
+
+        // Corner, lower left
+        if ( (points.get(index - 1).equals(gDown) && points.get(index + 1).equals(gLeft)) ||
+             (points.get(index + 1).equals(gLeft) && points.get(index - 1).equals(gDown)) )
+        {
+            int roll = new Random().nextInt(2);
+
+            nx = (roll == 0 ? x + 1 : x);
+            ny = (roll == 0 ? y : y - 1);
+            dirNew = (roll == 0 ? 4 : 1);
+            return new WallPath(nx, ny, dirNew);
+        }
+
+        return new WallPath(nx, ny, dirNew);
+    }
+
     public void grow()
     {
         int newX = points.get(points.size() - 1).x;
@@ -156,6 +246,30 @@ public class WallPath {
             } break;
 
             default: {} break;
+        }
+    }
+
+    public void rotateClockwise()
+    {
+        switch (direction)
+        {
+            case 1: { direction = 4; } break;
+            case 2: { direction = 3; } break;
+            case 3: { direction = 1; } break;
+            case 4: { direction = 2; } break;
+            default: { } break;
+        }
+    }
+
+    public void rotateCounterclockwise()
+    {
+        switch (direction)
+        {
+            case 1: { direction = 3; } break;
+            case 2: { direction = 4; } break;
+            case 3: { direction = 2; } break;
+            case 4: { direction = 1; } break;
+            default: { } break;
         }
     }
 
