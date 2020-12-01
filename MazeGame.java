@@ -14,9 +14,11 @@ public class MazeGame {
 
         Maze maze = new Maze(complexity);
 
-        System.out.println();    
-        maze.display();
-
-        System.out.println();    
+        if (complexity < 15)
+        {
+            System.out.println();
+            maze.display();
+            System.out.println();    
+        }
     }
 }

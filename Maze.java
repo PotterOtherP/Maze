@@ -20,6 +20,7 @@ public class Maze {
     private int wall_top;
     private int wall_right;
     private int wall_bottom;
+    private int while_control;
     private int branch_percent = 10;
     private GridPoint startPoint;
     private GridPoint exitPoint;
@@ -276,8 +277,6 @@ public class Maze {
 
     private boolean generate()
     {
-        int iterations = 0;
-
         // Create the seed WallPaths... Around the entrance and exit
         addPath(startPoint.x - 1, startPoint.y + 1, 2);
         addPath(startPoint.x + 1, startPoint.y + 1, 2);
@@ -292,8 +291,7 @@ public class Maze {
         addRandomInteriorPaths(complexity);
         System.out.println("Complexity: " + complexity);
 
-
-        while (!this.isComplete())
+        for (int iter = 0; iter <= MAX_ITERATIONS; ++iter)
         {
             // Main path updates
             for (WallPath path : paths)
@@ -328,8 +326,6 @@ public class Maze {
                 }
             }
 
-
-            ++iterations;
             for (WallPath branch : branches)
             {
                 if (pathIsClear(branch.getBranchCheckPoint(), branch.getDirection()))
@@ -338,22 +334,25 @@ public class Maze {
 
             branches.clear();
 
-            if ( (iterations % 100 == 0) ||
-                 (iterations < 100 && iterations % 10 == 0) )
-            {
-                System.out.print("After " + iterations + " iterations: ");
-                System.out.printf("%.2f", getWallPercent());
-                System.out.print("% walls\n");
-            }
-
-            if (iterations > MAX_ITERATIONS)
-            {
-                System.out.println("Could not complete maze in " + MAX_ITERATIONS + " iterations.");
-                return false;
-            }
+            // if ( (iter % 100 == 0) ||
+            //      (iter < 100 && iter % 10 == 0) )
+            // {
+            //     System.out.print("After " + iter + " iterations: ");
+            //     System.out.printf("%.2f", getWallPercent());
+            //     System.out.print("% walls\n");
+            // }
         }
 
-        System.out.println("Maze generated in " + iterations + " iterations.");
+        while_control = 0;
+
+        while (!this.isComplete())
+        {
+        
+            ++while_control;
+            if (while_control > 1000)
+                break;    
+        }
+
         return true;
 
     }
@@ -409,32 +408,73 @@ public class Maze {
 
     public boolean isComplete()
     {
+        boolean result = true;
+
+        // Horizontal set of 2 x 3 points
         for (int i = 1; i < rows - 2; ++i)
         {
             for (int j = 1; j < columns - 2; ++j)
             {
                 if (mazeGrid[i][j] == CH_SPACE &&
-                    mazeGrid[i + 1][j] == CH_SPACE &&
                     mazeGrid[i][j + 1] == CH_SPACE &&
-                    mazeGrid[i + 1][j + 1] == CH_SPACE)
+                    mazeGrid[i][j - 1] == CH_SPACE &&
+                    mazeGrid[i + 1][j] == CH_SPACE &&
+                    mazeGrid[i + 1][j + 1] == CH_SPACE &&
+                    mazeGrid[i + 1][j - 1] == CH_SPACE)
                 {
-                    // int chance = new Random().nextInt(20);
-                    // if (chance == 1)
-                    // {
-                    //     int spot = new Random().nextInt(4);
-                    //     int dir = new Random().nextInt(4) + 1;
+                    int roll = new Random().nextInt(2);
 
-                    //     if (spot == 0) addPath(j, i, dir);
-                    //     else if (spot == 1) addPath(j, i + 1, dir);
-                    //     else if (spot == 2) addPath(j + 1, i, dir);
-                    //     else addPath(j + 1, i + 1, dir);
-                    // }
-                    return false;
+                    if (roll == 0 && mazeGrid[i - 1][j] == CH_WALL)
+                    {
+                        addPath(j, i, 2);
+                        // System.out.println("Path added at (" + j + ", " + i + ").");
+                    }
+
+                    else if (roll == 0 && mazeGrid[i + 2][j] == CH_WALL)
+                    {
+                        addPath(j, i + 1, 1);
+                        // System.out.println("Path added at (" + j + ", " + i + ").");
+                    }
+                    
+                    result = false;
                 }
             }
         }
 
-        return true;
+        for (int i = 1; i < rows - 2; ++i)
+        {
+            for (int j = 1; j < columns - 2; ++j)
+            {
+
+                // Vertical set of 2 x 3 points
+                if (mazeGrid[i][j] == CH_SPACE &&
+                    mazeGrid[i][j + 1] == CH_SPACE &&
+                    mazeGrid[i - 1][j] == CH_SPACE &&
+                    mazeGrid[i - 1][j + 1] == CH_SPACE &&
+                    mazeGrid[i + 1][j] == CH_SPACE &&
+                    mazeGrid[i + 1][j + 1] == CH_SPACE)
+                {
+                    int roll = new Random().nextInt(2);
+
+                    if (roll == 0 && mazeGrid[i][j - 1] == CH_WALL)
+                    {
+                        addPath(j, i, 3);
+                        // System.out.println("Path added at (" + j + ", " + i + ").");
+                    }
+
+                    else if (roll == 0 && mazeGrid[i][j + 2] == CH_WALL)
+                    {
+                        addPath(j + 1, i, 4);
+                        // System.out.println("Path added at (" + j + ", " + i + ").");
+                    }
+                    
+                    result = false;
+                }
+            }
+
+        }
+
+        return result;
 
     }
 
