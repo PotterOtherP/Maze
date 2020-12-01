@@ -4,7 +4,9 @@ import java.util.ArrayList;
 public class Maze {
 
     public static final int COMPLEXITY_DEFAULT = 5;
-    public static final int MAX_ITERATIONS = 1000;
+    public static final int COMPLEXITY_MIN = 3;
+    public static final int COMPLEXITY_MAX = 100;
+    public static final int MAX_ITERATIONS = 500;
     public static final char CH_WALL = 'X';
     public static final char CH_SPACE = '-';
 
@@ -18,6 +20,7 @@ public class Maze {
     private int wall_top;
     private int wall_right;
     private int wall_bottom;
+    private int branch_percent = 10;
     private GridPoint startPoint;
     private GridPoint exitPoint;
 
@@ -29,9 +32,10 @@ public class Maze {
 
     public Maze(int comp)
     {
-        if (comp < 3 || comp > 100)
+        if (comp < COMPLEXITY_MIN || comp > COMPLEXITY_MAX)
         {
-            throw new IllegalArgumentException("Maze complexity must be between 3 and 100.");
+            throw new IllegalArgumentException("Maze complexity must be between " + COMPLEXITY_MIN
+            + " and " + COMPLEXITY_MAX + ".");
         }
 
         this.complexity = comp;
@@ -72,7 +76,7 @@ public class Maze {
         if (startPoint.x >= columns / 2)
             xCoords[0] = rando.nextInt(startPoint.x - 4 ) + 2;
         else
-            xCoords[0] = rando.nextInt(columns - startPoint.x ) + startPoint.x + 1;
+            xCoords[0] = rando.nextInt(columns - startPoint.x - 2) + startPoint.x + 1;
 
         addPath(xCoords[0], pathY, 2);
 
@@ -112,7 +116,7 @@ public class Maze {
         if (exitPoint.x >= columns / 2)
             xCoords[0] = rando.nextInt(exitPoint.x - 4 ) + 2;
         else
-            xCoords[0] = rando.nextInt(columns - exitPoint.x ) + exitPoint.x + 1;
+            xCoords[0] = rando.nextInt(columns - exitPoint.x - 2) + exitPoint.x + 1;
 
         addPath(xCoords[0], pathY, 1);
 
@@ -309,10 +313,10 @@ public class Maze {
                 else
                 {
                     path.changeDirection();
-                    path.checkActive();
+                    // path.checkActive();
                 }
 
-                if (!path.active && dieRoll <= 10)
+                if (!path.active && dieRoll <= branch_percent)
                 {
                     branches.add(path.branch());
                 }
@@ -328,11 +332,19 @@ public class Maze {
             ++iterations;
             for (WallPath branch : branches)
             {
-                if (pathIsClear(branch.getCheckPoint(), branch.getDirection()))
+                if (pathIsClear(branch.getBranchCheckPoint(), branch.getDirection()))
                     paths.add(branch);
             }
 
             branches.clear();
+
+            if ( (iterations % 100 == 0) ||
+                 (iterations < 100 && iterations % 10 == 0) )
+            {
+                System.out.print("After " + iterations + " iterations: ");
+                System.out.printf("%.2f", getWallPercent());
+                System.out.print("% walls\n");
+            }
 
             if (iterations > MAX_ITERATIONS)
             {
@@ -344,6 +356,21 @@ public class Maze {
         System.out.println("Maze generated in " + iterations + " iterations.");
         return true;
 
+    }
+
+    private double getWallPercent()
+    {
+        int total = (rows - 1 ) * (columns - 1);
+        int wallCount = 0;
+
+        for (int a = 1; a <= rows - 1; ++a)
+            for (int b = 1; b <= columns - 1; ++b)
+            {
+                if (mazeGrid[a][b] == CH_WALL)
+                    ++wallCount;
+            }
+
+        return(wallCount * 100.0) / (total * 1.0);
     }
 
     public static int getRandom(int n)

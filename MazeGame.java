@@ -6,6 +6,7 @@ public class MazeGame {
         argComp = Integer.parseInt(args[0], 10);
 
         int complexity = Math.max(argComp, 3);
+        complexity = Math.min(argComp, 100);
 
         System.out.println("Rows: " + complexity * 3);    
         System.out.println("Columns: " + complexity * 4);    

@@ -187,6 +187,39 @@ public class WallPath {
 
     }
 
+    public GridPoint getBranchCheckPoint()
+    {
+        int checkX = points.get(0).x;
+        int checkY = points.get(0).y;
+
+        switch (direction)
+        {
+            case 1:
+            {
+                return new GridPoint(checkX, checkY - 1);
+            } // break;
+
+            case 2:
+            {
+                return new GridPoint(checkX, checkY + 1);
+            } // break;
+
+            case 3:
+            {
+                return new GridPoint(checkX - 1, checkY);
+            } // break;
+
+            case 4:
+            {
+                return new GridPoint(checkX + 1, checkY);
+            } // break;
+
+            default: {} break;
+        }
+
+        return null;
+    }
+
     public void checkActive()
     {
         int dieRoll = new Random().nextInt(100) + 1;
