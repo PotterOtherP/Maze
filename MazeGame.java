@@ -2,14 +2,11 @@ public class MazeGame {
     
     public static void main(String[] args)
     {
-        int argComp = 0;
-        argComp = Integer.parseInt(args[0], 10);
+        int complexity = Maze.COMPLEXITY_DEFAULT;
 
-        int complexity = Math.max(argComp, 3);
-        complexity = Math.min(argComp, 100);
+        if (args.length > 0)
+            complexity = Integer.parseInt(args[0], 10);
 
-        System.out.println("Rows: " + complexity * 3);    
-        System.out.println("Columns: " + complexity * 4);    
         System.out.println();    
 
         Maze maze = new Maze(complexity);
@@ -20,5 +17,11 @@ public class MazeGame {
             maze.display();
             System.out.println();    
         }
+
+        else
+        {
+            System.out.println("Maze too large to display on command line.");
+        }
+
     }
 }

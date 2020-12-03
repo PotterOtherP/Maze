@@ -25,6 +25,10 @@ public class Maze {
     private GridPoint startPoint;
     private GridPoint exitPoint;
 
+    private ColorRGB wallColor;
+    private ColorRGB spaceColor;
+
+
     public Maze()
     {
         this(COMPLEXITY_DEFAULT);
@@ -50,6 +54,9 @@ public class Maze {
         mazeGrid = new char[rows][columns];
         paths = new ArrayList<WallPath>();
         branches = new ArrayList<WallPath>();
+
+        wallColor = new ColorRGB(100, 0, 0);
+        spaceColor = new ColorRGB(0, 0, 100);
 
         this.init();
         this.generate();
@@ -551,5 +558,9 @@ public class Maze {
         return true;
 
     }
+
+    public int getComplexity() { return complexity; }
+
+    public char[][] getGrid() {return mazeGrid; }
 
 }
