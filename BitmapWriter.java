@@ -8,12 +8,15 @@ public class BitmapWriter {
     public static void main(String[] args) throws IOException
     {
         String filename = "maze.bmp";
+        String filedataname = "mazedata";
 
         FileOutputStream output = null;
+        FileOutputStream outputData = null;
 
         try
         {
             output = new FileOutputStream(new File(filename));
+            outputData = new FileOutputStream(new File(filedataname));
         }
 
         catch (FileNotFoundException e)
@@ -27,6 +30,7 @@ public class BitmapWriter {
 
 
         output.write(image.getFileSignature());
+        outputData.write(image.getFileSignature());
         
         int[] header = image.getBitmapHeader();
         int[] dHeader = image.getDIBHeader();
@@ -34,6 +38,9 @@ public class BitmapWriter {
 
         writeIntArray(header, output);
         writeIntArray(dHeader, output);
+
+        writeIntArray(header, outputData);
+        writeIntArray(dHeader, outputData);
 
         // We want to convert the pixel information into a byte array, which
         // allows for the fastest writing. Writing one byte at a time is slow.
@@ -48,8 +55,10 @@ public class BitmapWriter {
         }
 
         output.write(pixelBytes);
+        outputData.write(pixelBytes);
 
         output.close();
+        outputData.close();
 
     }
 

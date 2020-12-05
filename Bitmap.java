@@ -50,14 +50,14 @@ public class Bitmap {
         DIB_imageHeight = height;
         DIB_planesAndBPP = 0x1 | 0x180000;
         DIB_compression = 0;
-        DIB_imageSize = width * height * Integer.BYTES * 3;
+        DIB_imageSize = width * height * 3;
         DIB_Xppm = 0;
         DIB_Yppm = 0;
         DIB_colorsInColorTable = 0;
         DIB_colorCount = 0;
 
-        header_FileSize = Integer.BYTES * (2 + 3 + 10) + DIB_imageSize;
-        header_PixelOffset = Integer.BYTES * (2 + 3 + 10);
+        header_FileSize = 2 + Integer.BYTES * (3 + 10) + DIB_imageSize;
+        header_PixelOffset = 2 + Integer.BYTES * (3 + 10);
 
         BitmapHeader[0] = header_FileSize;
         BitmapHeader[1] = header_Reserved;
