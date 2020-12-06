@@ -1,5 +1,11 @@
+import java.io.FileOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+
 public class Bitmap {
     
+    private String filename;
 
     private int width;
     private int height;
@@ -29,10 +35,12 @@ public class Bitmap {
 
     private ColorRGB[] PixelArray;
 
-    public Bitmap()
+    public Bitmap(int w, int h, String str)
     {
-        width = 640;
-        height = 480;
+        filename = str;
+
+        width = w;
+        height = h;
 
         FileSignature = new byte[2];
 
@@ -75,8 +83,14 @@ public class Bitmap {
         DIBHeader[9] = DIB_colorCount;
 
         PixelArray = new ColorRGB[width * height];
-        fillPixelsBlue();
+        fillPixelsGreen();
 
+    }
+
+    private void fillPixelsBlack()
+    {
+        for (int i = 0; i < PixelArray.length; ++i)
+                PixelArray[i] = new ColorRGB(0, 0, 0);
     }
 
     private void fillPixelsBlue()
@@ -91,6 +105,69 @@ public class Bitmap {
                 PixelArray[i] = new ColorRGB(10, 200, 10);
     }
 
+    public void writeFile() throws IOException
+    {
+        FileOutputStream output = null;
+
+        try
+        {
+            output = new FileOutputStream(new File(filename));
+        }
+
+        catch (FileNotFoundException e)
+        {
+            System.out.println(e.getMessage());
+        }
+
+        if (output == null) return;
+
+        output.write(FileSignature);
+        writeIntArray(BitmapHeader, output);
+        writeIntArray(DIBHeader, output);
+
+        byte[] pixelBytes = new byte[PixelArray.length * 3];
+
+        for (int p = 0; p < PixelArray.length; ++p)
+        {
+            pixelBytes[(p * 3)] = (byte)PixelArray[p].getBlue();
+            pixelBytes[(p * 3) + 1] = (byte)PixelArray[p].getGreen();
+            pixelBytes[(p * 3) + 2] = (byte)PixelArray[p].getRed();
+        }
+
+        output.write(pixelBytes);
+
+        output.close();
+    }
+
+    private void writeIntArray(int[] bArray, FileOutputStream fout) throws IOException
+    {
+        for (int i = 0; i < bArray.length; ++i)
+            writeIntToBytes(bArray[i], fout);
+    }
+
+    private void writeIntToBytes(int x, FileOutputStream fout) throws IOException
+    {
+        fout.write((byte)(x % 0x100));
+        fout.write((byte)((x / 0x100) % 0x100));
+        fout.write((byte)((x / 0x10000) % 0x100));
+        fout.write((byte)((x / 0x1000000) % 0x100));
+    }
+
+    public void writePixel(int x, int y, ColorRGB c)
+    {
+        try
+        {
+            PixelArray[(y * width) + x] = c;
+        }
+
+        catch (ArrayIndexOutOfBoundsException e)
+        {
+            System.out.println("Could not write pixel (out of bounds) at " + x + ", " + y);
+        }
+
+    }
+
+    public void setFilename(String str) { filename = str; }
     public byte[] getFileSignature() { return FileSignature; }
     public int[] getBitmapHeader() { return BitmapHeader; }
     public int[] getDIBHeader() { return DIBHeader; }

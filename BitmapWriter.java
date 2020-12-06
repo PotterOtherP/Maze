@@ -26,7 +26,7 @@ public class BitmapWriter {
 
         if (output == null) return;
 
-        Bitmap image = new Bitmap();
+        Bitmap image = new Bitmap(640, 480, filename);
 
 
         output.write(image.getFileSignature());

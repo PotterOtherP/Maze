@@ -11,17 +11,17 @@ public class MazeGame {
 
         Maze maze = new Maze(complexity);
 
-        if (complexity < 15)
-        {
-            System.out.println();
-            maze.display();
-            System.out.println();    
-        }
+        // if (complexity < 15)
+        // {
+        //     System.out.println();
+        //     maze.display();
+        //     System.out.println();    
+        // }
 
-        else
-        {
-            System.out.println("Maze too large to display on command line.");
-        }
+        // else
+        // {
+        //     System.out.println("Maze too large to display on command line.");
+        // }
 
     }
 }

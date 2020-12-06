@@ -1,5 +1,6 @@
 import java.util.Random;
 import java.util.ArrayList;
+import java.io.IOException;
 
 public class Maze {
 
@@ -7,6 +8,10 @@ public class Maze {
     public static final int COMPLEXITY_MIN = 3;
     public static final int COMPLEXITY_MAX = 100;
     public static final int MAX_ITERATIONS = 500;
+    public static final int MAZE_BITMAP_WIDTH = 1200;
+    public static final int MAZE_BITMAP_HEIGHT = 900;
+
+
     public static final char CH_WALL = 'X';
     public static final char CH_SPACE = '-';
 
@@ -55,11 +60,12 @@ public class Maze {
         paths = new ArrayList<WallPath>();
         branches = new ArrayList<WallPath>();
 
-        wallColor = new ColorRGB(100, 0, 0);
-        spaceColor = new ColorRGB(0, 0, 100);
+        wallColor = new ColorRGB(200, 10, 10);
+        spaceColor = new ColorRGB(10, 10, 200);
 
         this.init();
         this.generate();
+        this.createBitmap();
     }
 
     private void addPath(int x, int y, int d)
@@ -263,12 +269,37 @@ public class Maze {
 
     }
 
+    private void createBitmap()
+    {
+        try
+        {
+            Bitmap bitmap = new Bitmap(MAZE_BITMAP_WIDTH, MAZE_BITMAP_HEIGHT, "maze_default.bmp");
+
+            int wStart = MAZE_BITMAP_WIDTH / 4;
+            int wEnd = (MAZE_BITMAP_WIDTH * 3) / 4;
+            int hStart = MAZE_BITMAP_HEIGHT / 4;
+            int hEnd = (MAZE_BITMAP_HEIGHT * 3) / 4;
+
+            for (int y = 0; y < 200; ++y)
+                for (int x = 0; x < 200; ++x)
+                    bitmap.writePixel(x, y, wallColor);
+
+            bitmap.writeFile();
+        }
+
+        catch (IOException e)
+        {
+            System.out.println(e.getMessage());
+        }
+    }
+
     public void display()
     {
-        for (WallPath path : paths)
-        {
-            mazeGrid[path.points.get(0).y][path.points.get(0).x] = 'O';
-        }
+        // shows path origins
+        // for (WallPath path : paths)
+        // {
+        //     mazeGrid[path.points.get(0).y][path.points.get(0).x] = 'O';
+        // }
 
         for (int i = 0; i < rows; ++i)
         {
