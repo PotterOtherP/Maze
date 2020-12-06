@@ -25,6 +25,8 @@ public class MazeGame {
 
             complexity = 15;
 
+            System.out.println("Generating maze " + i + " with complexity " + complexity);
+
             Maze maze = new Maze(complexity, mazeName);
         }
 
