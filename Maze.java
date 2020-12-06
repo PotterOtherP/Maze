@@ -33,14 +33,22 @@ public class Maze {
     private ColorRGB wallColor;
     private ColorRGB spaceColor;
 
+    private String filename;
+    public static final String FILENAME_DEFAULT = "maze_default.bmp";
+
 
     public Maze()
     {
-        this(COMPLEXITY_DEFAULT);
+        this(COMPLEXITY_DEFAULT, FILENAME_DEFAULT);
+    }
+
+    public Maze(int comp)
+    {
+        this(comp, FILENAME_DEFAULT);
     }
 
 
-    public Maze(int comp)
+    public Maze(int comp, String name)
     {
         if (comp < COMPLEXITY_MIN || comp > COMPLEXITY_MAX)
         {
@@ -56,12 +64,16 @@ public class Maze {
         this.wall_right = this.columns - 1;
         this.wall_bottom = this.rows - 1;
 
+        filename = name;
+
         mazeGrid = new char[rows][columns];
         paths = new ArrayList<WallPath>();
         branches = new ArrayList<WallPath>();
 
-        wallColor = new ColorRGB(200, 10, 10);
-        spaceColor = new ColorRGB(10, 10, 200);
+        // wallColor = new ColorRGB(10, 150, 10);
+        // spaceColor = new ColorRGB(10, 10, 150);
+
+        randomizeColors();
 
         this.init();
         this.generate();
@@ -273,16 +285,21 @@ public class Maze {
     {
         try
         {
-            Bitmap bitmap = new Bitmap(MAZE_BITMAP_WIDTH, MAZE_BITMAP_HEIGHT, "maze_default.bmp");
+            Bitmap bitmap = new Bitmap(MAZE_BITMAP_WIDTH, MAZE_BITMAP_HEIGHT, filename);
 
-            int wStart = MAZE_BITMAP_WIDTH / 4;
-            int wEnd = (MAZE_BITMAP_WIDTH * 3) / 4;
-            int hStart = MAZE_BITMAP_HEIGHT / 4;
-            int hEnd = (MAZE_BITMAP_HEIGHT * 3) / 4;
+            int columnPixels = MAZE_BITMAP_WIDTH / columns;
+            int rowPixels = MAZE_BITMAP_HEIGHT / rows;
 
-            for (int y = 0; y < 200; ++y)
-                for (int x = 0; x < 200; ++x)
-                    bitmap.writePixel(x, y, wallColor);
+            for (int i = 0; i < rows; ++i)
+                for (int j = 0; j < columns; ++j)
+                {
+                    ColorRGB rectColor = mazeGrid[i][j] == CH_WALL ? wallColor: spaceColor;
+
+                    int rectX = j * columnPixels;
+                    int rectY = i * rowPixels;
+
+                    bitmap.fillRectangle(rectX, rectY, columnPixels, rowPixels, rectColor);
+                }
 
             bitmap.writeFile();
         }
@@ -327,7 +344,7 @@ public class Maze {
         addBottomWallPaths();
 
         addRandomInteriorPaths(complexity);
-        System.out.println("Complexity: " + complexity);
+        // System.out.println("Complexity: " + complexity);
 
         for (int iter = 0; iter <= MAX_ITERATIONS; ++iter)
         {
@@ -415,6 +432,22 @@ public class Maze {
        Random rand = new Random();
        return rand.nextInt(n);
 
+    }
+
+    private void randomizeColors()
+    {
+        Random rand = new Random();
+
+        int wallRed = rand.nextInt(180) + 30;
+        int wallGreen = rand.nextInt(180) + 30;
+        int wallBlue = rand.nextInt(180) + 30;
+
+        int spaceRed = (255 - wallRed) / 2;
+        int spaceGreen = (255 - wallGreen) / 2;
+        int spaceBlue = (255 - wallBlue) / 2;
+
+        wallColor = new ColorRGB(wallRed, wallGreen, wallBlue);
+        spaceColor = new ColorRGB(spaceRed, spaceGreen, spaceBlue);
     }
 
     private void init()

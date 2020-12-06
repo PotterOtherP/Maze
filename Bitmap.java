@@ -83,7 +83,7 @@ public class Bitmap {
         DIBHeader[9] = DIB_colorCount;
 
         PixelArray = new ColorRGB[width * height];
-        fillPixelsGreen();
+        fillPixelsColor(new ColorRGB("#2233ee"));
 
     }
 
@@ -104,6 +104,25 @@ public class Bitmap {
         for (int i = 0; i < PixelArray.length; ++i)
                 PixelArray[i] = new ColorRGB(10, 200, 10);
     }
+
+    private void fillPixelsColor(ColorRGB c)
+    {
+        for (int i = 0; i < PixelArray.length; ++i)
+                PixelArray[i] = c;
+    }
+
+    /**
+     * We want to treat (0, 0) as the upper left corner of the image
+     * and of the rectangle being painted.
+     */
+    public void fillRectangle(int x, int y, int rectW, int rectH, ColorRGB c)
+    {
+        for (int i = x; i < x + rectW; ++i)
+            for (int j = y; j < y + rectH; ++j)
+                writePixelUpperLeft(i, j, c);
+    }
+
+
 
     public void writeFile() throws IOException
     {
@@ -165,6 +184,21 @@ public class Bitmap {
             System.out.println("Could not write pixel (out of bounds) at " + x + ", " + y);
         }
 
+    }
+
+    public void writePixelUpperLeft(int x, int y, ColorRGB c)
+    {
+        y = height - 1 - y;
+
+        try
+        {
+            PixelArray[(y * width) + x] = c;
+        }
+
+        catch (ArrayIndexOutOfBoundsException e)
+        {
+            System.out.println("Could not write pixel (out of bounds) at " + x + ", " + y);
+        }
     }
 
     public void setFilename(String str) { filename = str; }
