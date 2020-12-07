@@ -285,7 +285,7 @@ public class Maze {
     {
         try
         {
-            Bitmap bitmap = new Bitmap(MAZE_BITMAP_WIDTH, MAZE_BITMAP_HEIGHT, filename);
+            Bitmap bitmap = new Bitmap(MAZE_BITMAP_WIDTH, MAZE_BITMAP_HEIGHT, filename + ".bmp");
 
             int columnPixels = MAZE_BITMAP_WIDTH / columns;
             int rowPixels = MAZE_BITMAP_HEIGHT / rows;
@@ -308,6 +308,12 @@ public class Maze {
         {
             System.out.println(e.getMessage());
         }
+
+    }
+
+    private void createSVG()
+    {
+
     }
 
     public void display()
@@ -389,13 +395,6 @@ public class Maze {
 
             branches.clear();
 
-            // if ( (iter % 100 == 0) ||
-            //      (iter < 100 && iter % 10 == 0) )
-            // {
-            //     System.out.print("After " + iter + " iterations: ");
-            //     System.out.printf("%.2f", getWallPercent());
-            //     System.out.print("% walls\n");
-            // }
         }
 
         while_control = 0;
@@ -425,6 +424,7 @@ public class Maze {
             }
 
         return(wallCount * 100.0) / (total * 1.0);
+
     }
 
     public static int getRandom(int n)
@@ -448,6 +448,7 @@ public class Maze {
 
         wallColor = new ColorRGB(wallRed, wallGreen, wallBlue);
         spaceColor = new ColorRGB(spaceRed, spaceGreen, spaceBlue);
+
     }
 
     private void init()

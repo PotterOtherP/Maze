@@ -15,36 +15,25 @@ public class MazeGame {
         String fileFolderName = "maze_images";
 
         File fileFolder = new File(fileFolderName);
-        fileFolder.mkdir();
+        if (!fileFolder.exists()) fileFolder.mkdir();
 
         String mazeName = "";
 
-        for (int i = 1; i <= 20; ++i)
-        {
-            mazeName = fileFolderName + "\\maze_" + i + ".bmp";
-
-            complexity = 15;
-
-            System.out.println("Generating maze " + i + " with complexity " + complexity);
-
-            Maze maze = new Maze(complexity, mazeName);
-        }
-
-        // Maze maze = new Maze(complexity, "test_name.bmp");
-
-
-
-        // if (complexity < 15)
+        // for (int i = 1; i <= 10; ++i)
         // {
-        //     System.out.println();
-        //     maze.display();
-        //     System.out.println();    
+        //     mazeName = fileFolderName + "\\maze_" + i;
+
+        //     complexity = 20;
+
+        //     System.out.println("Generating maze " + i + " with complexity " + complexity);
+
+        //     Maze maze = new Maze(complexity, mazeName);
         // }
 
-        // // else
-        // // {
-        // //     System.out.println("Maze too large to display on command line.");
-        // // }
+        SVG testSVG = new SVG("test.svg");
+        testSVG.writeFile();
 
+        ColorRGB testColor = new ColorRGB(2, 2, 2);
+        System.out.println(testColor.getCode());
     }
 }
