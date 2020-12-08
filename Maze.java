@@ -628,4 +628,8 @@ public class Maze {
 
     public char[][] getGrid() {return mazeGrid; }
 
+    public ColorRGB getWallColor() { return wallColor; }
+    public ColorRGB getSpaceColor() { return spaceColor; }
+    public ArrayList<WallPath> getWallPaths() { return paths; }
+
 }

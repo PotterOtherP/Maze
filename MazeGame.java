@@ -32,8 +32,5 @@ public class MazeGame {
 
         SVG testSVG = new SVG("test.svg");
         testSVG.writeFile();
-
-        ColorRGB testColor = new ColorRGB(2, 2, 2);
-        System.out.println(testColor.getCode());
     }
 }
