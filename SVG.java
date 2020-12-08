@@ -65,20 +65,18 @@ public class SVG {
         int columnPixels = WIDTH / (complexity * 4);
         int rowPixels = HEIGHT / (complexity * 3);
         
-        String result = "<path d=\"";
+        String result = "<polyline points=\"";
 
-        // create a new 2D array with the center pixels of the grid points
-        int[][] pathPoints = new int[path.points.size()][2];
 
         for (int i = 0; i < path.points.size(); ++i)
         {
-            pathPoints[i][0] = columnPixels * path.points.get(i).x + (columnPixels / 2);
-            pathPoints[i][1] = rowPixels * path.points.get(i).y + (rowPixels / 2);
+            result += columnPixels * path.points.get(i).x + (columnPixels / 2);
+            result += ",";
+            result += rowPixels * path.points.get(i).y + (rowPixels / 2);
+            result += " ";
         }
 
-
-
-        result += "\" />";
+        result += "\" fill=\"none\" stroke=\"black\" stroke-width=\"10\" />";
         elements.add(result);
 
     }
@@ -88,7 +86,7 @@ public class SVG {
         elements.add("<rect x=\"0\" y=\"0\" width=\"" + WIDTH + "\" height=\"" + HEIGHT + "\" fill=\"" + c.getCode() + "\"/>");
     }
 
-    public void paintMaze(Maze m,)
+    public void paintMaze(Maze m)
     {
         paintBackground(m.getSpaceColor());
 

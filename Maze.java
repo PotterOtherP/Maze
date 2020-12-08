@@ -78,6 +78,7 @@ public class Maze {
         this.init();
         this.generate();
         this.createBitmap();
+        this.createSVG();
     }
 
     private void addPath(int x, int y, int d)
@@ -313,7 +314,9 @@ public class Maze {
 
     private void createSVG()
     {
-
+        SVG svg = new SVG(filename + ".svg");
+        svg.paintMaze(this);
+        svg.writeFile();
     }
 
     public void display()

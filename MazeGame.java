@@ -17,11 +17,11 @@ public class MazeGame {
         File fileFolder = new File(fileFolderName);
         if (!fileFolder.exists()) fileFolder.mkdir();
 
-        String mazeName = "";
+        // String mazeName = "";
 
         // for (int i = 1; i <= 10; ++i)
         // {
-        //     mazeName = fileFolderName + "\\maze_" + i;
+        //     mazeName = fileFolderName + "/maze_" + i;
 
         //     complexity = 20;
 
@@ -32,5 +32,7 @@ public class MazeGame {
 
         SVG testSVG = new SVG("test.svg");
         testSVG.writeFile();
+
+        Maze maze = new Maze(10, "svgTestMaze");
     }
 }
