@@ -17,18 +17,18 @@ public class MazeGame {
         File fileFolder = new File(fileFolderName);
         if (!fileFolder.exists()) fileFolder.mkdir();
 
-        // String mazeName = "";
+        String mazeName = "";
 
-        // for (int i = 1; i <= 10; ++i)
-        // {
-        //     mazeName = fileFolderName + "/maze_" + i;
+        for (int i = 1; i <= 1; ++i)
+        {
+            mazeName = fileFolderName + "/maze_" + i;
 
-        //     complexity = 20;
+            complexity = 20;
 
-        //     System.out.println("Generating maze " + i + " with complexity " + complexity);
+            System.out.println("Generating maze " + i + " with complexity " + complexity);
 
-        //     Maze maze = new Maze(complexity, mazeName);
-        // }
+            Maze maze = new Maze(complexity, mazeName);
+        }
 
         SVG testSVG = new SVG("test.svg");
         testSVG.writeFile();

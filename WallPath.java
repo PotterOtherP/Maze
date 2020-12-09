@@ -154,7 +154,6 @@ public class WallPath {
 
     public GridPoint getCheckPoint()
     {
-
         int checkX = points.get(points.size() - 1).x;
         int checkY = points.get(points.size() - 1).y;
 

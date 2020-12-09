@@ -441,13 +441,13 @@ public class Maze {
     {
         Random rand = new Random();
 
-        int wallRed = rand.nextInt(180) + 30;
-        int wallGreen = rand.nextInt(180) + 30;
-        int wallBlue = rand.nextInt(180) + 30;
+        int spaceRed = rand.nextInt(40) + 190;
+        int spaceGreen = rand.nextInt(40) + 190;
+        int spaceBlue = rand.nextInt(40) + 190;
 
-        int spaceRed = (255 - wallRed) / 2;
-        int spaceGreen = (255 - wallGreen) / 2;
-        int spaceBlue = (255 - wallBlue) / 2;
+        int wallRed = 255 - spaceRed;
+        int wallGreen = 255 - spaceGreen;
+        int wallBlue = 255 - spaceGreen;
 
         wallColor = new ColorRGB(wallRed, wallGreen, wallBlue);
         spaceColor = new ColorRGB(spaceRed, spaceGreen, spaceBlue);

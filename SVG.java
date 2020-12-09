@@ -42,9 +42,9 @@ public class SVG {
         output.println("\txmlns:ev=\"http://www.w3.org/2001/sml-events\"");
         output.println("\tviewBox = \"0 0 " + WIDTH + " " + HEIGHT + "\">");
 
-        paintBackground(new ColorRGB(220, 220, 220));
+        // paintBackground(new ColorRGB(220, 220, 220));
 
-        drawCircle(500, 500, 300, new ColorRGB(180, 10, 180));
+        // drawCircle(500, 500, 300, new ColorRGB(180, 10, 180));
 
         for (String element : elements)
             output.println(element);
@@ -55,44 +55,25 @@ public class SVG {
         output.close();
     }
 
+    private void paintBackground(ColorRGB c)
+    {
+        elements.add("<rect x=\"0\" y=\"0\" width=\"" + WIDTH + "\" height=\"" + HEIGHT + "\" fill=\"" + c.getCode() + "\"/>");
+    }
+
     private void drawCircle(int cx, int cy, int r, ColorRGB c)
     {
         elements.add("<circle cx=\"" + cx + "\" cy=\"" + cy + "\" r=\"" + r + "\" fill=\"" + c.getCode() + "\"/>");
     }
 
-    private void drawPath(WallPath path, int complexity, ColorRGB c)
+    private void drawHorizontal()
     {
-        int columnPixels = WIDTH / (complexity * 4);
-        int rowPixels = HEIGHT / (complexity * 3);
         
-        String result = "<polyline points=\"";
-
-
-        for (int i = 0; i < path.points.size(); ++i)
-        {
-            result += columnPixels * path.points.get(i).x + (columnPixels / 2);
-            result += ",";
-            result += rowPixels * path.points.get(i).y + (rowPixels / 2);
-            result += " ";
-        }
-
-        result += "\" fill=\"none\" stroke=\"black\" stroke-width=\"10\" />";
-        elements.add(result);
-
-    }
-
-    private void paintBackground(ColorRGB c)
-    {
-        elements.add("<rect x=\"0\" y=\"0\" width=\"" + WIDTH + "\" height=\"" + HEIGHT + "\" fill=\"" + c.getCode() + "\"/>");
     }
 
     public void paintMaze(Maze m)
     {
         paintBackground(m.getSpaceColor());
 
-        for (WallPath p : m.getWallPaths())
-        {
-            drawPath(p, m.getComplexity(), m.getWallColor());
-        }
+
     }
 }
