@@ -46,6 +46,9 @@ public class SVG {
 
         // drawCircle(500, 500, 300, new ColorRGB(180, 10, 180));
 
+        drawHorizontal(50, 50, 200, 15, new ColorRGB(180, 10, 180));
+        drawVertical(50, 50, 200, 15, new ColorRGB(10, 180, 180));
+
         for (String element : elements)
             output.println(element);
 
@@ -65,9 +68,16 @@ public class SVG {
         elements.add("<circle cx=\"" + cx + "\" cy=\"" + cy + "\" r=\"" + r + "\" fill=\"" + c.getCode() + "\"/>");
     }
 
-    private void drawHorizontal()
+    private void drawHorizontal(int x, int y, int width, int height, ColorRGB c)
     {
-        
+        elements.add("<rect x=\"" + x + "\" y=\"" + y + "\" width=\"" + width + "\" height=\"" + height
+            + "\"" + " fill=\"" + c.getCode() + "\" rx=\"" + 5 + "\" />");
+    }
+
+    private void drawVertical(int x, int y, int width, int height, ColorRGB c)
+    {
+        elements.add("<rect x=\"" + x + "\" y=\"" + y + "\" width=\"" + height + "\" height=\"" + width
+            + "\"" + " fill=\"" + c.getCode() + "\" rx=\"" + 5 + "\" />");
     }
 
     public void paintMaze(Maze m)
