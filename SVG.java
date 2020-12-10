@@ -42,12 +42,6 @@ public class SVG {
         output.println("\txmlns:ev=\"http://www.w3.org/2001/sml-events\"");
         output.println("\tviewBox = \"0 0 " + WIDTH + " " + HEIGHT + "\">");
 
-        // paintBackground(new ColorRGB(220, 220, 220));
-
-        // drawCircle(500, 500, 300, new ColorRGB(180, 10, 180));
-
-        drawHorizontal(50, 50, 200, 15, new ColorRGB(180, 10, 180));
-        drawVertical(50, 50, 200, 15, new ColorRGB(10, 180, 180));
 
         for (String element : elements)
             output.println(element);
@@ -83,6 +77,72 @@ public class SVG {
     public void paintMaze(Maze m)
     {
         paintBackground(m.getSpaceColor());
+
+        int columns = m.getComplexity() * 4;
+        int rows = m.getComplexity() * 3;
+
+        int columnPixels = WIDTH / columns;
+        int rowPixels = HEIGHT / rows;
+
+        char[][] grid = m.getGrid();
+
+        // Horizontal wall sections
+        for (int i = 0; i < rows; ++i)
+        {
+            int sectionLength = 0;
+            int sectionX = 0;
+            int sectionY = i * rowPixels;
+
+            for (int j = 0; j < columns; ++j)
+            {
+                if (grid[i][j] == Maze.CH_WALL)
+                {
+                    if (sectionLength == 0)
+                        sectionX = j * columnPixels;
+
+                    ++sectionLength;
+                }
+
+                if (grid[i][j] != Maze.CH_WALL || j == columns - 1)
+                {
+                    if (sectionLength > 1)
+                    {
+                        drawHorizontal(sectionX, sectionY, sectionLength * columnPixels, rowPixels, m.getWallColor());
+                    }
+
+                    sectionLength = 0;
+                }
+            }
+        }
+
+        // Vertical wall sections
+        for (int i = 0; i < columns; ++i)
+        {
+            int sectionLength = 0;
+            int sectionX = i * columnPixels;
+            int sectionY = 0;
+
+            for (int j = 0; j < rows; ++j)
+            {
+                if (grid[j][i] == Maze.CH_WALL)
+                {
+                    if (sectionLength == 0)
+                        sectionY = j * rowPixels;
+
+                    ++sectionLength;
+                }
+
+                if (grid[j][i] != Maze.CH_WALL || j == rows - 1)
+                {
+                    if (sectionLength > 1)
+                    {
+                        drawVertical(sectionX, sectionY, sectionLength * rowPixels, columnPixels, m.getWallColor());
+                    }
+
+                    sectionLength = 0;
+                }
+            }
+        }
 
 
     }

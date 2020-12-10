@@ -6,7 +6,7 @@ public class Maze {
 
     public static final int COMPLEXITY_DEFAULT = 5;
     public static final int COMPLEXITY_MIN = 3;
-    public static final int COMPLEXITY_MAX = 100;
+    public static final int COMPLEXITY_MAX = 60;
     public static final int MAX_ITERATIONS = 500;
     public static final int MAZE_BITMAP_WIDTH = 1200;
     public static final int MAZE_BITMAP_HEIGHT = 900;
@@ -77,7 +77,7 @@ public class Maze {
 
         this.init();
         this.generate();
-        this.createBitmap();
+        // this.createBitmap();
         this.createSVG();
     }
 

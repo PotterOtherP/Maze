@@ -19,7 +19,7 @@ public class MazeGame {
 
         String mazeName = "";
 
-        for (int i = 1; i <= 1; ++i)
+        for (int i = 1; i <= 10; ++i)
         {
             mazeName = fileFolderName + "/maze_" + i;
 
@@ -30,9 +30,9 @@ public class MazeGame {
             Maze maze = new Maze(complexity, mazeName);
         }
 
-        SVG testSVG = new SVG("test.svg");
-        testSVG.writeFile();
+        // SVG testSVG = new SVG("test.svg");
+        // testSVG.writeFile();
 
-        Maze maze = new Maze(10, "svgTestMaze");
+        // Maze maze = new Maze(10, "svgTestMaze");
     }
 }
