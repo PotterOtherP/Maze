@@ -34,7 +34,7 @@ public class Maze {
     private ColorRGB spaceColor;
 
     private String filename;
-    public static final String FILENAME_DEFAULT = "maze_default.bmp";
+    public static final String FILENAME_DEFAULT = "maze_default";
 
 
     public Maze()

@@ -68,7 +68,7 @@ public class WallPath {
 
         // Corner, upper right
         if ( (points.get(index - 1).equals(gUp) && points.get(index + 1).equals(gRight)) ||
-             (points.get(index + 1).equals(gRight) && points.get(index - 1).equals(gUp)) )
+             (points.get(index + 1).equals(gUp) && points.get(index - 1).equals(gRight)) )
         {
             int roll = new Random().nextInt(2);
 
@@ -80,7 +80,7 @@ public class WallPath {
 
         // Corner, upper left
         if ( (points.get(index - 1).equals(gUp) && points.get(index + 1).equals(gLeft)) ||
-             (points.get(index + 1).equals(gLeft) && points.get(index - 1).equals(gUp)) )
+             (points.get(index + 1).equals(gUp) && points.get(index - 1).equals(gLeft)) )
         {
             int roll = new Random().nextInt(2);
 
@@ -92,7 +92,7 @@ public class WallPath {
 
         // Corner, lower right
         if ( (points.get(index - 1).equals(gDown) && points.get(index + 1).equals(gRight)) ||
-             (points.get(index + 1).equals(gRight) && points.get(index - 1).equals(gDown)) )
+             (points.get(index + 1).equals(gDown) && points.get(index - 1).equals(gRight)) )
         {
             int roll = new Random().nextInt(2);
 
@@ -104,7 +104,7 @@ public class WallPath {
 
         // Corner, lower left
         if ( (points.get(index - 1).equals(gDown) && points.get(index + 1).equals(gLeft)) ||
-             (points.get(index + 1).equals(gLeft) && points.get(index - 1).equals(gDown)) )
+             (points.get(index + 1).equals(gDown) && points.get(index - 1).equals(gLeft)) )
         {
             int roll = new Random().nextInt(2);
 
